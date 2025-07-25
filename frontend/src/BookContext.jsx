@@ -1,85 +1,41 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 
-const initialBooks = [
-  {
-    id: 1,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/covers/gatsby.jpg",
-    description: "A classic novel set in the Roaring Twenties.",
-    type: "borrow"
-  },
-  {
-    id: 2,
-    title: "1984",
-    author: "George Orwell",
-    cover: "/covers/1984.jpg",
-    description: "A dystopian novel about totalitarianism.",
-    type: "have"
-  },
-  {
-    id: 3,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/covers/gatsby.jpg",
-    description: "A classic novel set in the Roaring Twenties.",
-    type: "borrow"
-  },
-  {
-    id: 4,
-    title: "1984",
-    author: "George Orwell",
-    cover: "/covers/1984.jpg",
-    description: "A dystopian novel about totalitarianism.",
-    type: "have"
-  },
-  {
-    id: 5,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/covers/gatsby.jpg",
-    description: "A classic novel set in the Roaring Twenties.",
-    type: "borrow"
-  },
-  {
-    id: 6,
-    title: "1984",
-    author: "George Orwell",
-    cover: "/covers/1984.jpg",
-    description: "A dystopian novel about totalitarianism.",
-    type: "have"
-  },
-  {
-    id: 7,
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/covers/gatsby.jpg",
-    description: "A classic novel set in the Roaring Twenties.",
-    type: "borrow"
-  },
-  {
-    id: 8,
-    title: "1984",
-    author: "George Orwell",
-    cover: "/covers/1984.jpg",
-    description: "A dystopian novel about totalitarianism.",
-    type: "have"
-  },
-  // Add more book objects as needed
-]
-
-const BookContext = createContext()
+const BookContext = createContext(null);
 
 export function BookProvider({ children }) {
-  const [books, setBooks] = useState(initialBooks)
-  const addBook = (book) => setBooks([book, ...books])
+  const [books, setBooks] = useState([]);
+
+  // 🔁 Fetch books from backend
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axios.get("/api/books");
+        setBooks(res.data); // assumes array of books with _id
+      } catch (err) {
+        console.error("Failed to fetch books:", err);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  // ➕ Add book to backend + state
+  const addBook = async (bookData) => {
+    try {
+      const res = await axios.post("/api/books", bookData);
+      setBooks((prev) => [res.data, ...prev]); // API returns saved book with _id
+    } catch (err) {
+      console.error("Failed to add book:", err);
+    }
+  };
+
   return (
     <BookContext.Provider value={{ books, addBook }}>
       {children}
     </BookContext.Provider>
-  )
+  );
 }
 
 export function useBooks() {
-  return useContext(BookContext)
+  return useContext(BookContext);
 }

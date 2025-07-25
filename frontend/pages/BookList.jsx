@@ -69,9 +69,8 @@ export default function BookList() {
           </div>
         ) : (
           filteredBooks.map((book) => (
-            <Dialog key={book.id} open={selectedBook?.id === book.id} onOpenChange={(open) => setSelectedBook(open ? book : null)}>
-              <DialogTrigger asChild>
-                <Link to={`/book/${book.id}`} className="block">
+            
+                <Link to={`/books/${book.id}`} className="block">
                   <Card
                     className="flex flex-col cursor-pointer transition-shadow hover:shadow-lg"
                     onClick={() => setSelectedBook(book)}
@@ -95,25 +94,10 @@ export default function BookList() {
                     </CardContent>
                   </Card>
                 </Link>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{book.title}</DialogTitle>
-                  <DialogDescription>
-                    <span className="block mb-2">{book.author}</span>
-                    <img
-                      src={book.cover}
-                      alt={book.title}
-                      className="w-full h-60 object-contain rounded mb-4"
-                    />
-                    <span className="block mb-2">{book.description}</span>
-                    <span className="inline-block text-xs px-2 py-1 rounded bg-gray-200">
-                      {book.type === "borrow" ? "To Borrow" : "To Have"}
-                    </span>
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+              
+              
+                    
+           
           ))
         )}
       </div>
