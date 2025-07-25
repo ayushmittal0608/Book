@@ -5,6 +5,7 @@ const commentSchema = new mongoose.Schema({
   user: String,
   content: String,
   timestamp: String,
+  rating: { type: Number, min: 0, max: 5 }
 });
 
 const bookSchema = new mongoose.Schema({

@@ -16,12 +16,12 @@ router.get("/:id/comments", async (req, res) => {
 
 // POST comment to a book
 router.post("/:id/comments", async (req, res) => {
-  const { user, content, timestamp } = req.body;
+  const { user, content, timestamp, rating } = req.body;
   try {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: "Book not found" });
 
-    book.comments.unshift({ user, content, timestamp });
+    book.comments.unshift({ user, content, timestamp, rating: Number(rating) });
     await book.save();
 
     res.status(200).json({ message: "Comment added successfully", comments: book.comments });

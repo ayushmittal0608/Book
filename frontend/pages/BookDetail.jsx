@@ -21,7 +21,7 @@ export default function BookDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { books } = useBooks();
-
+  const [rating, setRating] = useState(0);
   const [book, setBook] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -64,6 +64,7 @@ export default function BookDetail() {
         user: localStorage.getItem("email"),
         content: comment.trim(),
         timestamp: new Date().toLocaleString(),
+        rating: Number(rating)
       };
 
       setComments([newComment, ...comments]);
@@ -193,9 +194,25 @@ export default function BookDetail() {
           </div>
         </div>
       </div>
-
+      
       <div className="mt-6">
-        <h3 className="text-2xl font-semibold">Add your comments</h3>
+         <h3 className="text-2xl font-semibold">Add your comments</h3>
+        <div className="flex items-center gap-1">
+          <h5>Star Rating:</h5>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          onClick={() => setRating(star)}
+          className={`cursor-pointer text-3xl ${
+            star <= rating ? 'text-yellow-400' : 'text-gray-400'
+          }`}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+
+       
         <div className="flex gap-2">
           <input
             placeholder="Write your comment here..."
@@ -203,6 +220,7 @@ export default function BookDetail() {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
+          
           <button
             onClick={handleAddComment}
             className="px-4 py-2 text-black bg-blue-600 rounded-lg hover:bg-blue-700"
@@ -220,6 +238,13 @@ export default function BookDetail() {
           <div className="text-sm text-gray-500 dark:text-gray-300 mb-1">
             <span className="font-medium">{c.user}</span> • {c.timestamp}
           </div>
+          <div className="flex gap-1 text-yellow-400 mb-1">
+      {[...Array(5)].map((_, i) => (
+        <span key={i} className={i < Number(c.rating) ? 'text-yellow-400' : 'text-gray-300'}>
+          ★
+        </span>
+      ))}
+    </div>
           <div>{c.content}</div>
         </div>
       ))}
