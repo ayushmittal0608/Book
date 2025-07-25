@@ -36,7 +36,7 @@ export default function BookDetail() {
   useEffect(() => {
   console.log("URL id:", id);
   console.log("Books from context:", books);
-  const found = books.find((b) => b.id === Number(id));
+  const found = books.find((b) => b._id === String(id));
   console.log("Found book:", found);
 
   if (found) {
@@ -61,7 +61,7 @@ export default function BookDetail() {
   const handleAddComment = async () => {
     if (comment.trim()) {
       const newComment = {
-        user: "JohnDoe",
+        user: localStorage.getItem("email"),
         content: comment.trim(),
         timestamp: new Date().toLocaleString(),
       };
@@ -205,7 +205,7 @@ export default function BookDetail() {
           />
           <button
             onClick={handleAddComment}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 text-black bg-blue-600 rounded-lg hover:bg-blue-700"
           >
             Post
           </button>

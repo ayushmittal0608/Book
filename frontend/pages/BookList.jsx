@@ -70,7 +70,7 @@ export default function BookList() {
         ) : (
           filteredBooks.map((book) => (
             
-                <Link to={`/books/${book.id}`} className="block">
+                <Link to={`/books/${book._id}`} className="block">
                   <Card
                     className="flex flex-col cursor-pointer transition-shadow hover:shadow-lg"
                     onClick={() => setSelectedBook(book)}
