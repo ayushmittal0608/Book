@@ -1,10 +1,11 @@
 const express = require("express");
 const Book = require("../models/Book.js");
+const auth = require("../middleware/auth.js");
 
 const router = express.Router();
 
 // GET book by ID (with comments)
-router.get("/:id/comments", async (req, res) => {
+router.get("/:id/comments",  async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: "Book not found" });

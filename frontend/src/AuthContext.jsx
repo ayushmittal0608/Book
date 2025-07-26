@@ -1,18 +1,18 @@
-import { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
+// Create context
 const AuthContext = createContext()
 
+// Provider
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  const login = () => setIsLoggedIn(true)
-  const logout = () => setIsLoggedIn(false)
+  const [user, setUser] = useState(null)
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
+// Custom hook
 export const useAuth = () => useContext(AuthContext)

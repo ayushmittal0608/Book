@@ -16,6 +16,7 @@ import {
   AlertDialogCancel,
 } from "../src/components/ui/alert-dialog";
 import axios from "axios";
+import { colors } from "@mui/material";
 
 export default function BookDetail() {
   const { id } = useParams();
@@ -25,12 +26,18 @@ export default function BookDetail() {
   const [book, setBook] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [filterRating, setFilterRating] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isHeartLoading, setIsHeartLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const userName= localStorage.getItem("email") || "Guest";
   const isLoggedIn = true; // Replace with real auth
   const role = "user";     // or "admin"
+  const averageRating =
+  comments.length > 0
+    ? comments.reduce((acc, c) => acc + Number(c.rating || 0), 0) / comments.length
+    : 0;
   
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function BookDetail() {
   const handleAddComment = async () => {
     if (comment.trim()) {
       const newComment = {
-        user: localStorage.getItem("email"),
+        user: userName,
         content: comment.trim(),
         timestamp: new Date().toLocaleString(),
         rating: Number(rating)
@@ -132,7 +139,7 @@ export default function BookDetail() {
           className="rounded-lg max-w-[300px] object-cover"
         />
 
-        <div className="space-y-4 w-full">
+        <div className="space-y-4 mt-8 w-full">
           <h1 className="text-4xl font-bold">{book.title}</h1>
           <h2 className="text-xl italic">by {book.author}</h2>
 
@@ -143,7 +150,7 @@ export default function BookDetail() {
             </div>
           )}
 
-          <div className="flex gap-3 items-center pt-2">
+          <div className="grid gap-3 items-center pt-2">
             <Button
               variant="outline"
               onClick={toggleFavorite}
@@ -158,6 +165,25 @@ export default function BookDetail() {
               )}
               <span className="ml-2">{isLiked ? "Added to Favourites" : "Add to Favourites"}</span>
             </Button>
+            {comments.length > 0 && (
+            <div className="flex items-center gap-2 mt-2">
+              <span className="font-semibold">Average Rating:</span>
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`text-3xl ${
+                      star <= Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <span className="text-gray-600 dark:text-gray-400 text-lg">({averageRating.toFixed(1)} / 5)</span>
+            </div>
+          )}
+
 
             {role === "admin" && (
               <>
@@ -229,25 +255,50 @@ export default function BookDetail() {
           </button>
         </div>
       </div>
-
-      {comments.map((c, index) => (
-        <div
-          key={index}
-          className="bg-gray-100 dark:bg-gray-700 p-3 shadow-sm rounded-md mt-2"
+      <div className="flex gap-2 items-center mt-6">
+        <h4 className="font-medium">Filter by Rating:</h4>
+        <Button
+          className="text-black"
+          variant={filterRating === 0 ? "default" : "outline"}
+          onClick={() => setFilterRating(0)}
         >
-          <div className="text-sm text-gray-500 dark:text-gray-300 mb-1">
-            <span className="font-medium">{c.user}</span> • {c.timestamp}
+          All
+        </Button>
+        {[5, 4, 3, 2, 1].map((r) => (
+          <Button
+            key={r}
+            className="text-black"
+            variant={filterRating === r ? "default" : "outline"}
+            onClick={() => setFilterRating(r)}
+          >
+            {r} ★
+          </Button>
+        ))}
+      </div>
+
+      {comments
+        .filter((c) => filterRating === 0 || Number(c.rating) === filterRating)
+        .map((c, index) => (
+          <div
+            key={index}
+            className="bg-gray-100 dark:bg-gray-700 p-3 shadow-sm rounded-md mt-2"
+          >
+            <div className="text-sm text-gray-500 dark:text-gray-300 mb-1">
+              <span className="font-medium">{c.user}</span> • {c.timestamp}
+            </div>
+            <div className="flex gap-1 mb-1">
+              {[...Array(5)].map((_, i) => (
+                <span
+                  key={i}
+                  className={i < Number(c.rating) ? 'text-yellow-400' : 'text-gray-300'}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <div>{c.content}</div>
           </div>
-          <div className="flex gap-1 text-yellow-400 mb-1">
-      {[...Array(5)].map((_, i) => (
-        <span key={i} className={i < Number(c.rating) ? 'text-yellow-400' : 'text-gray-300'}>
-          ★
-        </span>
-      ))}
-    </div>
-          <div>{c.content}</div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }

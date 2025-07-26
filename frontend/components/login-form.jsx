@@ -1,14 +1,19 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom" // or next/router if using Next.js
+import { useNavigate, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { useAuth } from "../src/AuthContext"
 
 export function LoginForm({ className, ...props }) {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const location = useLocation()
+  const { setUser } = useAuth()
+
+  const from = location.state?.from?.pathname || "/books"
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })
@@ -32,9 +37,11 @@ export function LoginForm({ className, ...props }) {
       if (!res.ok) {
         setError(data.error)
       } else {
-        localStorage.setItem("email", data.email)
+        localStorage.setItem("email", data.user.email)
+        localStorage.setItem("name", data.user.name)
+        setUser(data.user)
         alert("Login successful")
-        navigate("/books") // Change to your route
+        navigate(from, { replace: true })
       }
     } catch (err) {
       console.error(err)
