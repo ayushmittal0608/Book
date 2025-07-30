@@ -1,1 +1,16 @@
-
+services:
+  - type: web
+    name: book-review-app
+    env: node
+    buildCommand: |
+      cd frontend && npm install && npm run dev
+      cd backend && npm install
+    startCommand: npm start
+    buildFilter:
+      paths:
+        - frontend/**
+        - backend/**
+    autoDeploy: true
+    repo: https://github.com/abc-dummy/Book-Sharing-Platform
+    rootDir: backend
+      
