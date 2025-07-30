@@ -66,7 +66,7 @@ export default function BookList() {
           className="max-w-full"
         />
       </div>
-      <div className="flex gap-2 mb-10 justify-center">
+      <div className="flex flex-wrap gap-2 mb-10">
         <Button
           variant={filterType === "all" ? "default" : "outline"}
           onClick={() => setFilterType("all")}
@@ -88,7 +88,7 @@ export default function BookList() {
         >
           Books to Have
         </Button>
-        <div className="flex gap-2 mb-10 justify-center">
+        <div className="flex gap-2 mb-10 justify-left">
           {[0, 1, 2, 3, 4, 5].map((rating) => (
             <Button
               key={rating}
