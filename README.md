@@ -42,6 +42,7 @@ Project Structure
     ├── frontend/        # React frontend
     ├── backend/         # Express backend
     └── README.md
+```
 
 ## 🧪 Future Enhancements
 - Admin Dashboard for managing book and reviews.
