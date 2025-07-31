@@ -22,8 +22,6 @@ A full-stack Book Review Web Application built using the MERN stack (MongoDB, Ex
 
 ## 🧑‍💻 Getting Started
 
-### 1. Clone the repository
-
 ```bash
 git clone https://github.com/your-username/book-review-platform.git
 cd Book
