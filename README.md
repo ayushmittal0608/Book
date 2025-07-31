@@ -28,7 +28,7 @@ A full-stack Book Review Web Application built using the MERN stack (MongoDB, Ex
 git clone https://github.com/your-username/book-review-platform.git
 cd Book
 
-**### 2. Install Dependencies**
+Install Dependencies
 
 - Frontend
       cd frontend
@@ -37,12 +37,13 @@ cd Book
       cd backend
       npm start
 
-**### 3. Project Structure**
-      book-review-platform/
-      │
-      ├── frontend/          # React frontend
-      ├── backend/          # Express backend
-      └── README.md
+Project Structure
+
+  book-review-platform/
+    │
+    ├── frontend/        # React frontend
+    ├── backend/         # Express backend
+    └── README.md
 
 ## 🧪 Future Enhancements
 - Admin Dashboard for managing book and reviews.
